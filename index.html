@@ -1,0 +1,83 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/async@3.1.0/dist/async.min.js" integrity="sha256-Pdd9BewcEhv9cjGCHEY0Hqk6Fmj6izNGrw1/mo61zRI=" crossorigin="anonymous"></script>
+</head>
+<body>
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="montecarlo-tab" data-toggle="tab" href="#montecarlo" role="tab" aria-controls="montecarlo" aria-selected="false">MonteCarlo</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="bootstrap-tab" data-toggle="tab" href="#bootstrap" role="tab" aria-controls="bootstrap" aria-selected="false">Bootstrap</a>
+    </li>
+    <!--
+    <li class="nav-item">
+      <a class="nav-link" id="calibration-tab" data-toggle="tab" href="#calibration" role="tab" aria-controls="calibration" aria-selected="false">Calibration</a>
+    </li>
+    !-->
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <p>Click on the tabulation above to launch the test, be carreful it can use too much memory/cpu and froze</p>
+      <p>Javascript is not a language which is well adapted to those kind of heavy computation, but it allow a quick exploration of the domain</p>
+      <p>AD stand for Automatic differentiation, AAD stand for Automatic Adjoint differentiation</p>
+      <p>I expect AD cost to grow linearly with the number of greek, while I expect AAD to stay constant but cost a lot of memory</p>
+      <p>Differents method used:</p>
+      <ul>
+        <li><b>direct:</b> basic implementation, call the basic operation (*,+,/,-,log,exp,etc...) directly</li>
+        <li><b>no AD:</b> call the basic operation through a similar interface than the one used for the AD method below</li>
+        <li><b>AD Hash:</b> Forward differentiation, store greek in a hash map, each basic operation create a new hash map... quite costly</li>
+        <li><b>AD Hash - Safe:</b> Same as above but with safety mechanism for easy debugging</li>
+        <li><b>AD Array:</b> Forward differentiation, store greek in an array, each basic operation create a new array, quicker but still costly</li>
+        <li><b>AAD Tape:</b> Backward differentiation, store each operation in the tape, once the computation is completed, compute the adjoint in a backward manner</li>
+        <li><b>AAD Tape Opt:</b> Optimisation from the above to reduce the number of allocation</li>
+      </ul>
+    </div>
+    <div class="tab-pane fade" id="montecarlo" role="tabpanel" aria-labelledby="montecarlo-tab">
+      <h1>MonteCarlo</h1>
+      <p>Pricing of a vanilla option with Montecarlo, 2 greeks retrieved: Delta and Gamma</p>
+      <p>In this scenario, we don't have a lot of greeks to compute, but a lot of basic operation<br/>
+      AAD Memory consumption is penalysing it greatly, and the few greeks doesn't offset the penality</p>
+      <p>I multiply the basic cost (no AD) by 3 to take the bump and reprice into account</p>
+      <div id="chartDivMC1"></div>
+      <div id="chartDivMC2"></div>
+    </div>
+    <div class="tab-pane fade" id="bootstrap" role="tabpanel" aria-labelledby="bootstrap-tab">
+      <h1>BootStrap</h1>
+      <p>Pricing of a 1000 bonds using one interest rate curve with 16 maturities</p>
+      <p>In this scenario, we have a lot of greeks to compute<br/>
+      AAD Can shine and show great result</p>
+      <p>I multiply the basic cost (no AD) by 17 to take the bump and reprice into account</p>
+      <div id="chartDivBS1"></div>
+      <div id="chartDivBS2"></div>
+    </div>
+    <!--
+    <div class="tab-pane fade" id="calibration" role="tabpanel" aria-labelledby="calibration-tab">
+      <h1>Calibration</h1>
+      <div id="resultCalibration"></div>
+    </div>
+    -->
+  </div>
+</body>
+<script src="googlechart-loadhelper.js"></script>
+<script src="util.js"></script>
+<script src="util-ad.js"></script>
+<script src="finance-vanilla.js"></script>
+<script src="finance-ad.js"></script>
+<script src="method0.js"></script>
+<script src="method1-safe.js"></script>
+<script src="method1.js"></script>
+<script src="method2.js"></script>
+<script src="method3.js"></script>
+<script src="method4.js"></script>
+<script src="main.js"></script>
+</script>
+</html>

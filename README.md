@@ -1,0 +1,2 @@
+# AutoDifferentiationExperiment
+Experimentation around automatic adjoint differentiation

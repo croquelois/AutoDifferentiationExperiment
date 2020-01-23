@@ -16,7 +16,7 @@ class AAD {
     let N = result.idx;
     let adjArr = new Array(N+1).fill(0);
     adjArr[N] = 1.0;
-    console.log(N);
+    //console.log(N);
     for(let j=N; j>=0; --j){
       let adj = adjArr[j];
       if(adj != 0){
@@ -76,16 +76,14 @@ class AAD {
     if(v.val > 0)
       return v;
     return this.zero;
-    /*if(v.val > 0){
-      this.tape.push({next:[
-        {idx:v.idx,der:1},
-      ]});
-      return {val:v.val, idx:this.tape.length-1};
-    }
-    this.tape.push({next:[]});
-    return {val:0, idx:this.tape.length-1};*/
   }
 
+  abs(v){
+    if(v.val >= 0)
+      return v;
+    return this.neg(v);
+  }
+  
   minus(a, b){
     this.tape.push([
       {idx:a.idx,der:1},

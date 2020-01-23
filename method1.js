@@ -45,6 +45,14 @@ class AD {
       return v;
     return {val:0,grad:{}};
   }
+  
+  abs(v){
+    if(v.val >= 0)
+      return v;
+    let grad = {};
+    Object.keys(v.grad).forEach(k => grad[k] = - v.grad[k]);
+    return {val:-v.val,grad};
+  }
 
   acc(a, b){
     a.val += b.val;

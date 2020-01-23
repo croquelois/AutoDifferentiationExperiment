@@ -15,6 +15,7 @@ class AD {
       return v;
     return 0;
   }
+  abs(v){ return Math.abs(v); }
 
   acc(a, b){
     // be carreful a is not updated

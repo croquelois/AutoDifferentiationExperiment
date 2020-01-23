@@ -18,11 +18,9 @@
     <li class="nav-item">
       <a class="nav-link" id="bootstrap-tab" data-toggle="tab" href="#bootstrap" role="tab" aria-controls="bootstrap" aria-selected="false">Bootstrap</a>
     </li>
-    <!--
     <li class="nav-item">
-      <a class="nav-link" id="calibration-tab" data-toggle="tab" href="#calibration" role="tab" aria-controls="calibration" aria-selected="false">Calibration</a>
+      <a class="nav-link" id="solver-tab" data-toggle="tab" href="#solver" role="tab" aria-controls="solver" aria-selected="false">Solver</a>
     </li>
-    !-->
   </ul>
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -59,17 +57,29 @@
       <div id="chartDivBS1"></div>
       <div id="chartDivBS2"></div>
     </div>
-    <!--
-    <div class="tab-pane fade" id="calibration" role="tabpanel" aria-labelledby="calibration-tab">
-      <h1>Calibration</h1>
-      <div id="resultCalibration"></div>
+    <div class="tab-pane fade" id="solver" role="tabpanel" aria-labelledby="solver-tab">
+      <h1>Solver 1D</h1>
+      <p>Test of 3 solver in one dimension, the problem to solve is to found the square root of 2</p>
+      <p>The bisection method fail to provide a derivate, heavy control flow is an obstacle for AD</p>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Method</th>
+            <th scope="col">Root</th>
+            <th scope="col">Root derivate</th>
+          </tr>
+        </thead>
+        <tbody id="resultSolver">
+        </tbody>
+      </table>
     </div>
-    -->
   </div>
 </body>
 <script src="googlechart-loadhelper.js"></script>
 <script src="util.js"></script>
 <script src="util-ad.js"></script>
+<script src="solver.js"></script>
+<script src="solver-ad.js"></script>
 <script src="finance-vanilla.js"></script>
 <script src="finance-ad.js"></script>
 <script src="method0.js"></script>

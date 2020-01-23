@@ -22,8 +22,8 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     case "bootstrap-tab":
       computeBootstrapTab();
     break;
-    case "calibration-tab":
-      computeCalibrationTab();
+    case "solver-tab":
+      computeSolverTab();
     break;
   }
 })
@@ -142,10 +142,81 @@ function computeBootstrapTab(){
   });
 }
 
-function computeCalibrationTab(){
-  let verbose = false;
-  let nbTest = 5;
-  //TODO
+function computeSolverTab(){
+  let dgt = 10;
+  let sqrtRootOf = 2;
+  let AD = Method4;
+  
+  function problem(v, ad){
+    if(!ad){
+      return {
+        f: x => x*x-v,
+        df: x => 2*x
+      };
+    }
+    let c2 = ad.cst(2);
+    return {
+      f: x => ad.minus(ad.multiply(x,x),v),
+      df: x => ad.multiply(c2,x)
+    };
+  }
+  
+  function solution(){
+    return ["Solution", Math.sqrt(sqrtRootOf), (1/(2*Math.sqrt(sqrtRootOf)))];
+  }
+  function testBisection(){
+    let p = problem(sqrtRootOf);
+    return ["Bisection", bisection(p.f,0,sqrtRootOf,1e-10), "N/A"];  
+  }
+
+  function testNewton(){
+    let p = problem(sqrtRootOf);
+    return ["Newton", newton(p.f,p.df,1,1e-10), "N/A"];  
+  }
+
+  function testBrent(){
+    let p = problem(sqrtRootOf);
+    return ["Brent", brent(p.f,0,sqrtRootOf,1e-10), "N/A"];  
+  }
+
+  function testBisectionAD(){
+    let ad = new AD();
+    let p = problem(ad.variable("v", sqrtRootOf), ad);
+    let res = bisectionAD(ad, p.f, ad.cst(0),ad.cst(sqrtRootOf),1e-10);
+    return ["Bisection AD", res.val, ad.getGrad(res)["v"]];
+  }
+
+  function testNewtonAD(){
+    let ad = new AD();
+    let p = problem(ad.variable("v", sqrtRootOf), ad);
+    let res = newtonAD(ad, p.f, p.df, ad.cst(1),1e-10);
+    return ["Newton AD", res.val, ad.getGrad(res)["v"]];
+  }
+
+  function testBrentAD(){
+    let ad = new AD();
+    let p = problem(ad.variable("v", sqrtRootOf), ad);
+    let res = brentAD(ad, p.f, ad.cst(0),ad.cst(sqrtRootOf),1e-10);
+    return ["Brent AD", res.val, ad.getGrad(res)["v"]];
+  }
+
+  let rows = [
+    solution(),
+    testBisection(),
+    testNewton(),
+    testBrent(),
+    testBisectionAD(),
+    testNewtonAD(),
+    testBrentAD(),
+  ];
+  $("#resultSolver").empty();
+  rows.reduce(function(tbody,row){
+    return tbody.append(row.reduce(function(tr,txt,col){
+      if(col == 0)
+        return tr.append($("<th>").attr("scope","row").text(txt));
+      return tr.append($("<td>").text(txt.toFixed?txt.toFixed(dgt):txt));
+    }, $("<tr>")));
+  },$("#resultSolver"));
 }
 
 function computeMontecarloTab(){

@@ -55,6 +55,15 @@ class AD {
       return v;
     return {val:0,grad:[]};
   }
+  
+  abs(v){
+    if(v.val >= 0)
+      return v;
+    let grad = [];
+    for(let i=0;i<this.nbVar;i++)
+      grad[i] = - (v.grad[i] || 0);
+    return {val:-v.val,grad};
+  }
 
   acc(a, b){
     a.val += b.val;

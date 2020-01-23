@@ -87,6 +87,12 @@ class AAD {
     return {val:0, idx:this.tape.length-1};*/
   }
 
+  abs(v){
+    if(v.val >= 0)
+      return v;
+    return this.neg(v);
+  }
+  
   minus(a, b){
     this.tape.push({next:[
       {idx:a.idx,der:1},
